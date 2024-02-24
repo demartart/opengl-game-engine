@@ -76,3 +76,15 @@ void Shader::Destroy() {
 void Shader::Activate() {
     glUseProgram(id);
 }
+
+void Shader::UniformSetf(const std::string &name, const float value) const {
+    glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Shader::UniformSeti(const std::string &name, const int value) const {
+    glUniform1i(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Shader::UniformSetmat4(const std::string &name, const glm::mat4 &value) const {
+    glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, &value[0][0]);
+}

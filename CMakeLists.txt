@@ -16,4 +16,4 @@ target_sources(game PRIVATE
     src/rendering/buffer.cpp
     src/rendering/vertex_array.cpp)
 target_link_libraries(game PRIVATE glfw)
-target_include_directories(game PRIVATE glad/include)
+target_include_directories(game PRIVATE glad/include glm/include)
