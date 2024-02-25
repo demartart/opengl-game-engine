@@ -9,11 +9,11 @@
 static inline unsigned int CompileShader(unsigned int type, const std::string &src) {
     const char *cstr = src.c_str();
 
-    unsigned int id = glCreateShader(type);
+    u32 id = glCreateShader(type);
     glShaderSource(id, 1, &cstr, nullptr);
     glCompileShader(id);
 
-    int success;
+    i32 success;
     char infoLog[1024];
     glGetShaderiv(id, GL_COMPILE_STATUS, &success);
     if (!success) {
@@ -42,16 +42,16 @@ Shader Shader::Create(const std::string &fsFilePath, const std::string &vsFilePa
 
     std::string fragSrc = fst.str(), vertSrc = vst.str();
 
-    unsigned int fragment = CompileShader(GL_FRAGMENT_SHADER, fragSrc);
-    unsigned int vertex = CompileShader(GL_VERTEX_SHADER, vertSrc);
+    u32 fragment = CompileShader(GL_FRAGMENT_SHADER, fragSrc);
+    u32 vertex = CompileShader(GL_VERTEX_SHADER, vertSrc);
 
-    unsigned int prog = glCreateProgram();
+    u32 prog = glCreateProgram();
     glAttachShader(prog, fragment);
     glAttachShader(prog, vertex);
 
     glLinkProgram(prog);
 
-    int success;
+    i32 success;
     char infoLog[1024];
     glGetProgramiv(prog, GL_LINK_STATUS, &success);
     if (!success) {
@@ -77,11 +77,11 @@ void Shader::Activate() {
     glUseProgram(id);
 }
 
-void Shader::UniformSetf(const std::string &name, const float value) const {
+void Shader::UniformSetf(const std::string &name, const f32 value) const {
     glUniform1f(glGetUniformLocation(id, name.c_str()), value);
 }
 
-void Shader::UniformSeti(const std::string &name, const int value) const {
+void Shader::UniformSeti(const std::string &name, const i32 value) const {
     glUniform1i(glGetUniformLocation(id, name.c_str()), value);
 }
 

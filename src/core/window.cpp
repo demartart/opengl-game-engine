@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-std::optional<Window> Window::Create(int width, int height, const char *title) {
+std::optional<Window> Window::Create(i32 width, i32 height, const char *title) {
     Window w = {
         .windowHandle = nullptr,
         .width = width,

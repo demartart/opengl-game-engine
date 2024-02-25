@@ -1,6 +1,8 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+#include "../conf.hpp"
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
@@ -9,9 +11,9 @@
 class Window {
 public:
     GLFWwindow *windowHandle;
-    int width, height;
+    i32 width, height;
 
-    static std::optional<Window> Create(int width, int height, const char *title);
+    static std::optional<Window> Create(i32 width, i32 height, const char *title);
     void Destroy();
 
     void Close();

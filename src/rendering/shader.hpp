@@ -1,6 +1,8 @@
 #ifndef SHADER_HPP
 #define SHADER_HPP
 
+#include "../conf.hpp"
+
 #include <glm/glm.hpp>
 
 #include <string>
@@ -14,8 +16,8 @@ public:
 
     void Activate();
 
-    void UniformSetf(const std::string &name, const float value) const;
-    void UniformSeti(const std::string &name, const int value) const;
+    void UniformSetf(const std::string &name, const f32 value) const;
+    void UniformSeti(const std::string &name, const i32 value) const;
     void UniformSetmat4(const std::string &name, const glm::mat4 &value) const;
 };
 

@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 
-VertexArray GenerateVAO(float *verts, int num_verts, unsigned int *indices, int num_indices) {
+VertexArray GenerateVAO(f32 *verts, i32 num_verts, u32 *indices, i32 num_indices) {
     VertexArray vao = {
         .id = 0,
         .num_elements = num_indices

@@ -1,3 +1,4 @@
+#include "conf.hpp"
 #include "core/window.hpp"
 #include "core/buf_counter.hpp"
 #include "rendering/shader.hpp"
@@ -12,26 +13,26 @@
 #include <vector>
 
 bool firstMouse = true;
-float lastPosX = 0.0f, lastPosY = 0.0f;
-float cameraYaw = -90.0f;
-float cameraPitch = 0.0f;
+f32 lastPosX = 0.0f, lastPosY = 0.0f;
+f32 cameraYaw = -90.0f;
+f32 cameraPitch = 0.0f;
 
 glm::mat4 nextView = glm::mat4 { 1.0f };
 
-void processMouse(GLFWwindow *window, double mx, double my) {
+void processMouse(GLFWwindow *window, f64 mx, f64 my) {
     if (firstMouse) {
         lastPosX = mx;
         lastPosY = my;
         firstMouse = false;
     }
 
-    float xOff = mx - lastPosX;
-    float yOff = lastPosY - my;
+    f32 xOff = mx - lastPosX;
+    f32 yOff = lastPosY - my;
 
     lastPosX = mx;
     lastPosY = my;
 
-    float sens = 0.05f;
+    f32 sens = 0.05f;
     cameraYaw += xOff * sens;
     cameraPitch += yOff * sens;
 
@@ -74,13 +75,13 @@ int main() {
     Shader shader = Shader::Create("default.fs", "default.vs");
     shader.Activate();
 
-    std::vector<float> verts = {
+    std::vector<f32> verts = {
         -0.5f, -0.5f, 0.0f,
          0.5f, -0.5f, 0.0f,
         -0.5f,  0.5f, 0.0f,
          0.5f,  0.5f, 0.0f,
     };
-    std::vector<unsigned int> indices = {
+    std::vector<u32> indices = {
         0, 1, 2,
         2, 1, 3,
     };
@@ -98,20 +99,20 @@ int main() {
     );
 
     glm::mat4 projection = glm::mat4 { 1.0f };
-    projection = glm::perspective(glm::radians(85.0f), (float)window.width / window.height, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(85.0f), (f32)window.width / window.height, 0.1f, 100.0f);
 
     shader.UniformSetmat4("model", model);
     shader.UniformSetmat4("view", view);
     shader.UniformSetmat4("projection", projection);
 
-    float dt = 0.0f;
-    float lastFrame = 0.0f;
+    f32 dt = 0.0f;
+    f32 lastFrame = 0.0f;
 
     glfwSetCursorPosCallback(window.windowHandle, processMouse);
     glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
     while (window.IsOpen()) {
-        float currentFrame = glfwGetTime();
+        f32 currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
 

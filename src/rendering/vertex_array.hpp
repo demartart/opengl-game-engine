@@ -1,12 +1,14 @@
 #ifndef VERTEXARRAY_HPP
 #define VERTEXARRAY_HPP
 
+#include "../conf.hpp"
+
 struct VertexArray {
-    unsigned int id;
-    int num_elements;
+    u32 id;
+    i32 num_elements;
 };
 
-VertexArray GenerateVAO(float *verts, int num_verts, unsigned int *indices, int num_indices);
+VertexArray GenerateVAO(f32 *verts, i32 num_verts, u32 *indices, i32 num_indices);
 void DrawVAO(const VertexArray &vao);
 
 #endif
