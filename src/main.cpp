@@ -1,4 +1,5 @@
 #include "conf.hpp"
+#include "3d/camera.hpp"
 #include "core/window.hpp"
 #include "core/buf_counter.hpp"
 #include "rendering/shader.hpp"
@@ -14,10 +15,8 @@
 
 bool firstMouse = true;
 f32 lastPosX = 0.0f, lastPosY = 0.0f;
-f32 cameraYaw = -90.0f;
-f32 cameraPitch = 0.0f;
 
-glm::mat4 nextView = glm::mat4 { 1.0f };
+Camera mainCamera;
 
 void processMouse(GLFWwindow *window, f64 mx, f64 my) {
     if (firstMouse) {
@@ -32,31 +31,30 @@ void processMouse(GLFWwindow *window, f64 mx, f64 my) {
     lastPosX = mx;
     lastPosY = my;
 
-    f32 sens = 0.05f;
-    cameraYaw += xOff * sens;
-    cameraPitch += yOff * sens;
+    mainCamera.ProcessMouse(glm::vec2 { xOff, yOff });
+}
 
-    if (cameraPitch > 89.0f) {
-        cameraPitch = 89.0f;
+void processKeyboard(GLFWwindow *window, float dt) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
     }
-    if (cameraPitch < -89.0f) {
-        cameraPitch = -89.0f;
+    
+    glm::vec2 dir = glm::vec2 { 0.0f };
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        dir.y = 1;
     }
-
-    cameraYaw = glm::mod(cameraYaw, 360.f);
-
-    glm::vec3 forward = glm::normalize(glm::vec3 {
-        cosf(glm::radians(cameraYaw)) * cosf(glm::radians(cameraPitch)),
-        sinf(glm::radians(cameraPitch)),
-        sinf(glm::radians(cameraYaw)) * cosf(glm::radians(cameraPitch))
-    });
-    glm::vec3 right = glm::normalize(glm::cross(forward, glm::vec3 { 0.0f, 1.0f, 0.0f }));
-    glm::vec3 up = glm::normalize(glm::cross(right, forward));
-    nextView = glm::lookAt(
-        glm::vec3 { 0.0f, 0.0f, 3.0f }, 
-        glm::vec3 { 0.0f, 0.0f, 3.0f } + forward,
-        up
-    );
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        dir.y = -1;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        dir.x = -1;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        dir.x = 1;
+    }
+    if (dir != glm::vec2 { 0.0f, 0.0f })
+        dir = glm::normalize(dir);
+    mainCamera.ProcessInput(dir, dt);
 }
 
 int main() {
@@ -74,6 +72,8 @@ int main() {
 
     Shader shader = Shader::Create("default.fs", "default.vs");
     shader.Activate();
+    
+    mainCamera = Camera::Create(glm::vec3 { 0.0f, 0.0f, 3.0f });
 
     std::vector<f32> verts = {
         -0.5f, -0.5f, 0.0f,
@@ -84,7 +84,7 @@ int main() {
     std::vector<u32> indices = {
         0, 1, 2,
         2, 1, 3,
-    };
+    }; 
 
     VertexArray vao = GenerateVAO(verts.data(), verts.size(), indices.data(), indices.size());
 
@@ -92,11 +92,7 @@ int main() {
     model = glm::translate(model, glm::vec3 { 0.0f, 0.0f, 0.0f });
 
     glm::mat4 view = glm::mat4 { 1.0f };
-    view = glm::lookAt(
-        glm::vec3 { 0.0f, 0.0f, 3.0f },
-        glm::vec3 { 0.0f, 0.0f, 0.0f },
-        glm::vec3 { 0.0f, 1.0f, 0.0f }
-    );
+    view = mainCamera.GetViewMatrix();
 
     glm::mat4 projection = glm::mat4 { 1.0f };
     projection = glm::perspective(glm::radians(85.0f), (f32)window.width / window.height, 0.1f, 100.0f);
@@ -115,11 +111,12 @@ int main() {
         f32 currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
+        
+        processKeyboard(window.windowHandle, dt);
 
         glClearColor(0.5f, 0.0f, 0.7f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        shader.UniformSetmat4("view", nextView);
+        shader.UniformSetmat4("view", mainCamera.GetViewMatrix());
         
         DrawVAO(vao);
 

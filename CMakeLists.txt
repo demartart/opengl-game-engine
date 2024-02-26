@@ -10,6 +10,7 @@ add_executable(game)
 target_sources(game PRIVATE 
     glad/src/glad.c
     src/main.cpp
+    src/3d/camera.cpp
     src/core/window.cpp
     src/core/buf_counter.cpp
     src/rendering/shader.cpp
