@@ -82,10 +82,10 @@ int main() {
     mainCamera = Camera::Create(glm::vec3 { 0.0f, 0.0f, 3.0f });
 
     std::vector<Vertex> verts = {
-        { -0.5f, -0.5f, 0.0f },
-        {  0.5f, -0.5f, 0.0f },
-        { -0.5f,  0.5f, 0.0f },
-        {  0.5f,  0.5f, 0.0f },
+        Vertex {{ -0.5f, -0.5f, 0.0f }},
+        Vertex {{  0.5f, -0.5f, 0.0f }},
+        Vertex {{ -0.5f,  0.5f, 0.0f }},
+        Vertex {{  0.5f,  0.5f, 0.0f }},
     };
     std::vector<u32> indices = {
         0, 1, 2,
