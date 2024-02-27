@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 
-VertexArray GenerateVAO(f32 *verts, i32 num_verts, u32 *indices, i32 num_indices) {
+VertexArray GenerateVAO(Vertex *verts, i32 num_verts, u32 *indices, i32 num_indices) {
     VertexArray vao = {
         .id = 0,
         .num_elements = num_indices
@@ -12,7 +12,7 @@ VertexArray GenerateVAO(f32 *verts, i32 num_verts, u32 *indices, i32 num_indices
     glGenVertexArrays(1, &vao.id);
     glBindVertexArray(vao.id);
 
-    Buffer vbo = CreateBufferf(GL_ARRAY_BUFFER, verts, num_verts);
+    Buffer vbo = CreateBufferVertex(GL_ARRAY_BUFFER, verts, num_verts);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
     glEnableVertexAttribArray(0);
 

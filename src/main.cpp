@@ -3,6 +3,7 @@
 #include "core/window.hpp"
 #include "core/buf_counter.hpp"
 #include "rendering/shader.hpp"
+#include "rendering/vertex.hpp"
 #include "rendering/vertex_array.hpp"
 
 #include <GLFW/glfw3.h>
@@ -12,6 +13,11 @@
 
 #include <cstdio>
 #include <vector>
+
+/*
+    TODO:
+        Textures (Image Loading) 
+*/
 
 bool firstMouse = true;
 f32 lastPosX = 0.0f, lastPosY = 0.0f;
@@ -75,11 +81,11 @@ int main() {
     
     mainCamera = Camera::Create(glm::vec3 { 0.0f, 0.0f, 3.0f });
 
-    std::vector<f32> verts = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
+    std::vector<Vertex> verts = {
+        { -0.5f, -0.5f, 0.0f },
+        {  0.5f, -0.5f, 0.0f },
+        { -0.5f,  0.5f, 0.0f },
+        {  0.5f,  0.5f, 0.0f },
     };
     std::vector<u32> indices = {
         0, 1, 2,

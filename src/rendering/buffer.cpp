@@ -2,6 +2,16 @@
 
 #include <glad/glad.h>
 
+Buffer CreateBufferVertex(u32 type, Vertex *data, i32 data_length) {
+    Buffer b = { .id = 0 };
+    glGenBuffers(1, &b.id);
+
+    glBindBuffer(type, b.id);
+    glBufferData(type, sizeof(Vertex) * data_length, data, GL_STATIC_DRAW); 
+
+    return b;
+}
+
 Buffer CreateBufferf(u32 type, f32 *data, i32 data_length) {
     Buffer b = { .id = 0 };
     glGenBuffers(1, &b.id);
