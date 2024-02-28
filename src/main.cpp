@@ -15,14 +15,6 @@
 #include <cstdio>
 #include <vector>
 
-/*
- * TODO for texture loading
- *  - Binding Textures
- *  - Frag shader accepts uniform
- *  - Vertices specify a texture coordinate
- *  - Need a sample texture image for testing
-*/
-
 bool firstMouse = true;
 f32 lastPosX = 0.0f, lastPosY = 0.0f;
 
@@ -86,14 +78,54 @@ int main() {
     mainCamera = Camera::Create(glm::vec3 { 0.0f, 0.0f, 3.0f });
 
     std::vector<Vertex> verts = {
-        Vertex {{ -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f }},
-        Vertex {{  0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f }},
-        Vertex {{ -0.5f,  0.5f, 0.0f }, { 0.0f, 1.0f }},
-        Vertex {{  0.5f,  0.5f, 0.0f }, { 1.0f, 1.0f }},
+        Vertex {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }},
+        Vertex {{  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }},
+        Vertex {{ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }},
+        Vertex {{  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }},
+        
+        Vertex {{ -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }},
+        Vertex {{  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }},
+        Vertex {{ -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }},
+        Vertex {{  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }},
+        
+        Vertex {{  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }},
+        Vertex {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }},
+        Vertex {{  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }},
+        Vertex {{  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }},
+
+        Vertex {{ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }},
+        Vertex {{ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }},
+        Vertex {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }},
+        Vertex {{ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }},
+        
+        Vertex {{ -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }},
+        Vertex {{  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }},
+        Vertex {{ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }},
+        Vertex {{  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }},
+
+        Vertex {{ -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }},
+        Vertex {{  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }},
+        Vertex {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f }},
+        Vertex {{  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f }},
     };
     std::vector<u32> indices = {
         0, 1, 2,
         2, 1, 3,
+        
+        4, 5, 6,
+        6, 5, 7,
+        
+        8, 9, 10,
+        10, 9, 11,
+        
+        12, 13, 14,
+        14, 13, 15,
+        
+        16, 17, 18,
+        18, 17, 19,
+        
+        20, 21, 22,
+        22, 21, 23,
     }; 
 
     VertexArray vao = GenerateVAO(verts.data(), verts.size(), indices.data(), indices.size());
@@ -130,8 +162,14 @@ int main() {
         processKeyboard(window.windowHandle, dt);
 
         glClearColor(0.5f, 0.0f, 0.7f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shader.UniformSetmat4("view", mainCamera.GetViewMatrix());
+        
+        // some test movement :)
+        glm::mat4 nextModel = glm::mat4 { 1.0f };
+        nextModel = glm::translate(nextModel, glm::vec3 { 0.0f, fabsf(sinf(currentFrame)), 0.0f });
+        nextModel = glm::rotate(nextModel, 2 * glm::mod(currentFrame, 360.0f), glm::vec3 { 0.0f, 1.0f, 0.0f });
+        shader.UniformSetmat4("model", nextModel);
         
         BindTexture(texture);
         DrawVAO(vao);

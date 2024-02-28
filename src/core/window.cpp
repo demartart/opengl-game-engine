@@ -46,6 +46,7 @@ bool Window::InitOpenGL() {
     }
 
     glViewport(0, 0, width, height);
+    glEnable(GL_DEPTH_TEST);
     return true;
 }
 
