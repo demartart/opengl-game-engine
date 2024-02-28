@@ -4,6 +4,7 @@
 #include "core/buf_counter.hpp"
 #include "rendering/shader.hpp"
 #include "rendering/vertex.hpp"
+#include "rendering/texture.hpp"
 #include "rendering/vertex_array.hpp"
 
 #include <GLFW/glfw3.h>
@@ -16,6 +17,7 @@
 
 /*
  * TODO for texture loading
+ *  - Binding Textures
  *  - Frag shader accepts uniform
  *  - Vertices specify a texture coordinate
  *  - Need a sample texture image for testing
@@ -78,16 +80,16 @@ int main() {
         return 2;
     }
 
-    Shader shader = Shader::Create("default.fs", "default.vs");
+    Shader shader = Shader::Create(RESPATH "/default.fs", RESPATH "/default.vs");
     shader.Activate();
     
     mainCamera = Camera::Create(glm::vec3 { 0.0f, 0.0f, 3.0f });
 
     std::vector<Vertex> verts = {
-        Vertex {{ -0.5f, -0.5f, 0.0f }},
-        Vertex {{  0.5f, -0.5f, 0.0f }},
-        Vertex {{ -0.5f,  0.5f, 0.0f }},
-        Vertex {{  0.5f,  0.5f, 0.0f }},
+        Vertex {{ -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f }},
+        Vertex {{  0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f }},
+        Vertex {{ -0.5f,  0.5f, 0.0f }, { 0.0f, 1.0f }},
+        Vertex {{  0.5f,  0.5f, 0.0f }, { 1.0f, 1.0f }},
     };
     std::vector<u32> indices = {
         0, 1, 2,
@@ -95,7 +97,8 @@ int main() {
     }; 
 
     VertexArray vao = GenerateVAO(verts.data(), verts.size(), indices.data(), indices.size());
-
+    Texture *texture = LoadTexture(RESPATH "/texture.png");
+    
     glm::mat4 model = glm::mat4 { 1.0f };
     model = glm::translate(model, glm::vec3 { 0.0f, 0.0f, 0.0f });
 
@@ -107,14 +110,18 @@ int main() {
 
     shader.UniformSetmat4("model", model);
     shader.UniformSetmat4("view", view);
-    shader.UniformSetmat4("projection", projection);
+    shader.UniformSetmat4("projection", projection); 
+
+    BindTexture(texture); 
+    shader.UniformSeti("uTexture", 0);
+    UnbindTexture();
 
     f32 dt = 0.0f;
     f32 lastFrame = 0.0f;
 
     glfwSetCursorPosCallback(window.windowHandle, processMouse);
     glfwSetInputMode(window.windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    
+     
     while (window.IsOpen()) {
         f32 currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
@@ -126,11 +133,14 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
         shader.UniformSetmat4("view", mainCamera.GetViewMatrix());
         
+        BindTexture(texture);
         DrawVAO(vao);
+        UnbindTexture();
 
         window.SwapBuffers();
     }
 
+    DeleteTexture(texture);
     BufCounter::CleanUp();
     window.Destroy();
     return 0;

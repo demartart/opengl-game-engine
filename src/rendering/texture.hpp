@@ -12,4 +12,7 @@ struct Texture {
 Texture *LoadTexture(const char *path);
 void DeleteTexture(Texture *texture);
 
+void BindTexture(Texture *texture);
+void UnbindTexture();
+
 #endif

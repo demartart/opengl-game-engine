@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 project(gamework)
 
+set(INDEV ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 
@@ -16,6 +17,12 @@ target_sources(game PRIVATE
     src/rendering/image.cpp
     src/rendering/shader.cpp
     src/rendering/buffer.cpp
+    src/rendering/texture.cpp
     src/rendering/vertex_array.cpp)
 target_link_libraries(game PRIVATE glfw)
 target_include_directories(game PRIVATE glad/include glm/include stb_image)
+if(INDEV)
+    target_compile_definitions(game PRIVATE RESPATH="${CMAKE_SOURCE_DIR}/res")
+else()
+    target_compile_definitions(game PRIVATE RESPATH="./res")
+endif()

@@ -5,6 +5,7 @@
 
 struct Vertex {
     f32 positions[3];
+    f32 textureCoords[2];
 };
 
 #endif

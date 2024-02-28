@@ -34,3 +34,11 @@ void DeleteTexture(Texture *texture) {
     glDeleteTextures(1, &texture->id);
     delete texture;
 }
+
+void BindTexture(Texture *texture) {
+    glBindTexture(GL_TEXTURE_2D, texture->id); 
+}
+
+void UnbindTexture() {
+    glBindTexture(GL_TEXTURE_2D, 0);
+}

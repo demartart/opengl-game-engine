@@ -19,7 +19,7 @@ static inline unsigned int CompileShader(unsigned int type, const std::string &s
     if (!success) {
         int len;
         glGetShaderInfoLog(id, 1024, &len, infoLog);
-        fprintf(stderr, "[Error] Failed to Compile Shader: %s\n", infoLog);
+        fprintf(stderr, "[Error] Failed to Compile %s Shader: %s\n", (type == GL_VERTEX_SHADER) ? "Vertex" : "Fragment" , infoLog);
         return -1;
     }
 

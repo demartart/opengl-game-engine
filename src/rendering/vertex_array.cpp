@@ -13,8 +13,10 @@ VertexArray GenerateVAO(Vertex *verts, i32 num_verts, u32 *indices, i32 num_indi
     glBindVertexArray(vao.id);
 
     Buffer vbo = CreateBufferVertex(GL_ARRAY_BUFFER, verts, num_verts);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(sizeof(float) * 3));
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
 
     Buffer ebo = CreateBufferu(GL_ELEMENT_ARRAY_BUFFER, indices, num_indices);
 
