@@ -15,8 +15,10 @@
 #include <vector>
 
 /*
-    TODO:
-        Textures (Image Loading) 
+ * TODO for texture loading
+ *  - Frag shader accepts uniform
+ *  - Vertices specify a texture coordinate
+ *  - Need a sample texture image for testing
 */
 
 bool firstMouse = true;
