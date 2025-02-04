@@ -9,7 +9,7 @@ A game engine I've been writing off-and-on as a personal project. Currently it s
 * A simple system for managing allocated graphics resources through the `BufCounter` class
 
 ### Features Wishlist
-[ ] System for loading and playing audio
-[ ] Loading and rendering 3D models in a way that doesn't require direct interaction with OpenGL functionality
-[ ] A form of scene-based object hierachy so that we might actually be able to call this a game engine with a straight face
-[ ] Configurable input system as currently all inputs are hard-coded
+ - [ ] System for loading and playing audio
+ - [ ] Loading and rendering 3D models in a way that doesn't require direct interaction with OpenGL functionality
+ - [ ] A form of scene-based object hierachy so that we might actually be able to call this a game engine with a straight face
+ - [ ] Configurable input system as currently all inputs are hard-coded
