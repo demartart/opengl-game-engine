@@ -43,6 +43,7 @@ namespace Internal {
     }
 }
 
+// This doesn't work yet, still need to finish translating the Assimp data structures into ours
 Model Model::Load(const std::string &path) {
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
