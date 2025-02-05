@@ -4,9 +4,9 @@ in vec2 textCoords;
 
 out vec4 fragmentColor;
 
-uniform sampler2D uTexture;
+uniform sampler2D texture_diffuse1;
 
 void main()
 {
-    fragmentColor = texture(uTexture, textCoords);
+    fragmentColor = texture(texture_diffuse1, textCoords);
 }

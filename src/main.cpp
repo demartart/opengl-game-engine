@@ -3,17 +3,13 @@
 #include "core/window.hpp"
 #include "core/buf_counter.hpp"
 #include "rendering/shader.hpp"
-#include "rendering/vertex.hpp"
-#include "rendering/texture.hpp"
-#include "rendering/vertex_array.hpp"
-
+#include "3d/model.hpp"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <cstdio>
-#include <vector>
 
 bool firstMouse = true;
 f32 lastPosX = 0.0f, lastPosY = 0.0f;
@@ -77,6 +73,9 @@ int main() {
     
     mainCamera = Camera::Create(glm::vec3 { 0.0f, 0.0f, 3.0f });
 
+    Model mm(RESPATH "/suzanne.obj");
+
+/*
     std::vector<Vertex> verts = {
         Vertex {{ -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }},
         Vertex {{  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }},
@@ -130,7 +129,8 @@ int main() {
 
     VertexArray vao = GenerateVAO(verts.data(), verts.size(), indices.data(), indices.size());
     Texture *texture = LoadTexture(RESPATH "/texture.png");
-    
+*/
+
     glm::mat4 model = glm::mat4 { 1.0f };
     model = glm::translate(model, glm::vec3 { 0.0f, 0.0f, 0.0f });
 
@@ -144,9 +144,11 @@ int main() {
     shader.UniformSetmat4("view", view);
     shader.UniformSetmat4("projection", projection); 
 
+/*
     BindTexture(texture); 
     shader.UniformSeti("uTexture", 0);
     UnbindTexture();
+*/
 
     f32 dt = 0.0f;
     f32 lastFrame = 0.0f;
@@ -165,6 +167,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shader.UniformSetmat4("view", mainCamera.GetViewMatrix());
         
+        /*
         // some test movement :)
         glm::mat4 nextModel = glm::mat4 { 1.0f };
         nextModel = glm::translate(nextModel, glm::vec3 { 0.0f, fabsf(sinf(currentFrame)), 0.0f });
@@ -174,11 +177,14 @@ int main() {
         BindTexture(texture);
         DrawVAO(vao);
         UnbindTexture();
+        */
+
+        mm.Draw(shader);
 
         window.SwapBuffers();
     }
 
-    DeleteTexture(texture);
+    //DeleteTexture(texture);
     BufCounter::CleanUp();
     window.Destroy();
     return 0;
